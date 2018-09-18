@@ -1,0 +1,1 @@
+input_dir="../../../../usr/train-schedule-optimisation-challenge-starter-kit/problem_instances"
