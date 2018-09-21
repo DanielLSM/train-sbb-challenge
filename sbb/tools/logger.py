@@ -1,4 +1,6 @@
 # https://docs.python.org/3.6/howto/logging-cookbook.html
+# TODO: Include Process and ThreadID and Caller Identity
+# https://stackoverflow.com/questions/3926017/log-message-style-guide
 import logging
 
 # logger
@@ -17,7 +19,7 @@ ch.setLevel(logging.INFO)
 # logging.basicConfig(
 #     format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 formatter = logging.Formatter(
-    '%(asctime)s - %(name)s: %(levelname)s - %(message)s',
+    '%(asctime)s - %(name)s - %(threadName)s: \n #%(levelname)s - %(message)s',
     datefmt='%m/%d/%Y %I:%M:%S %p')
 fh.setFormatter(formatter)
 ch.setFormatter(formatter)
