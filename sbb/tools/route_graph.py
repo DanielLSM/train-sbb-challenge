@@ -97,14 +97,14 @@ def save_graph(route_graphs):
             alpha=0.9)
         nx.draw_networkx_edge_labels(
             route_graph, pos, edge_labels=edge_labels, font_color='red')
-        nx.write_graphml(route_graph, "graph-" + str(k) + ".graphml")
+        # nx.write_graphml(route_graph, "graph-" + str(k) + ".graphml")
         plt.show()
 
 
 # scratch######################################
 
 if __name__ == "__main__":
-    scenario = "../sample_files/sample_scenario.json"
+    scenario = "../../../../usr/train-schedule-optimisation-challenge-starter-kit/sample_files/sample_scenario.json"
     with open(scenario) as fp:
         scenario = json.load(fp)
     route_graphs = generate_route_graphs(scenario)

@@ -103,5 +103,7 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+####################### my denies
 # vs code things
 .vscode/
+*.graphml
