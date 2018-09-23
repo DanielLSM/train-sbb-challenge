@@ -107,3 +107,6 @@ venv.bak/
 # vs code things
 .vscode/
 *.graphml
+
+# Mumble Rappers
+/sbb/algos/*.py
