@@ -3,8 +3,7 @@ import sbb.tools.logger
 import pprint
 import networkx
 
-from itertools import product, starmap
-from itertools import chain.from_iterable as chaini
+from itertools import chain, product, starmap
 from functools import partial
 
 from sbb.tools.parsers import parse_input_paths, parse_json_file
@@ -45,23 +44,37 @@ class InstanceAPI:
                 len(self._ipaths)))
             raise e
 
-    def generate_all_paths(self, route_id: int, start: str, end: str) -> list:
+    def nodes(self, route_id) -> list:
+        return list(self.route_graphs[route_id].nodes())
+
+    def edges(self, route_id) -> list:
+        return list(self.route_graphs[route_id].edges())
+
+    def generate_paths(self, route_id: int, start: str, end: str) -> list:
         all_paths = partial(networkx.algorithms.simple_paths.all_simple_paths,
                             self.route_graphs[route_id])
-        return list(chaini(starmap(all_paths,start,end)))
-        
+        return list(chain.from_iterable(starmap(all_paths, start, end)))
+
         # return networkx.algorithms.simple_paths.all_simple_paths(
         #     self.route_graphs[route_id], source=start, target=end)
 
-    def nodes(self, route_id) -> list:
-        return self.route_graphs[route_id].nodes()
+    #TODO generate meaningfull route sections with sequece numbers as needed for the solution
+    #TODO get rid of the M1 cancer, we need to generate meaningful variables with times
 
-    def edges(self, route_id) -> list:
-        return self.route_graphs[route_id].edges()
+    def generate_all_paths(self, route_id: int) -> list:
+        roots = (
+            v for v, d in self.route_graphs[route_id].in_degree() if d == 0)
+        leaves = (
+            v for v, d in self.route_graphs[route_id].out_degree() if d == 0)
+        all_paths = partial(networkx.algorithms.simple_paths.all_simple_paths,
+                            self.route_graphs[route_id])
+        return list(
+            chain.from_iterable(starmap(all_paths, product(roots, leaves))))
 
     # def inspect(self, key: str):
     #     return pprint.pprint(self.data[key])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+
     i = InstanceAPI()
