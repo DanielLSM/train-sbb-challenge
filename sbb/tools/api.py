@@ -3,6 +3,10 @@ import sbb.tools.logger
 import pprint
 import networkx
 
+from itertools import product, starmap
+from itertools import chain.from_iterable as chaini
+from functools import partial
+
 from sbb.tools.parsers import parse_input_paths, parse_json_file
 from sbb.tools import input_dir, input_samples
 from sbb.tools.route_graph import generate_route_graphs
@@ -18,7 +22,7 @@ class InstanceAPI:
         self.api_logger.setLevel(logging.INFO)
 
         self.data = self._load_data(ninstance)
-        self.route_graphs = generate_route_graphs(self.data['routes'])
+        self.route_graphs = generate_route_graphs(self.data)
         self._fname = self.data['label']
         self.api_logger.info('API for the Instances Initialized')
 
@@ -42,14 +46,18 @@ class InstanceAPI:
             raise e
 
     def generate_all_paths(self, route_id: int, start: str, end: str) -> list:
-        return networkx.algorithms.simple_paths.all_simple_paths(
-            self.route_graphs[route_id], source=start, target=end)
+        all_paths = partial(networkx.algorithms.simple_paths.all_simple_paths,
+                            self.route_graphs[route_id])
+        return list(chaini(starmap(all_paths,start,end)))
+        
+        # return networkx.algorithms.simple_paths.all_simple_paths(
+        #     self.route_graphs[route_id], source=start, target=end)
 
     def nodes(self, route_id) -> list:
-        return self.route_graphs.nodes()
+        return self.route_graphs[route_id].nodes()
 
     def edges(self, route_id) -> list:
-        return self.route_graphs.edges()
+        return self.route_graphs[route_id].edges()
 
     # def inspect(self, key: str):
     #     return pprint.pprint(self.data[key])
