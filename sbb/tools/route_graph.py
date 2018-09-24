@@ -46,6 +46,8 @@ def generate_route_graphs(scenario):
     # now build the graph. Nodes are called "previous_FAB -> next_FAB" within lineare abschnittsfolgen and "AK" if
     # there is an Abschnittskennzeichen 'AK' on it
     route_graphs = dict()
+
+    # list of routes
     for route in scenario["routes"]:
 
         # set global graph settings
@@ -104,8 +106,16 @@ def save_graph(route_graphs):
 # scratch######################################
 
 if __name__ == "__main__":
+
     scenario = "../../../../usr/train-schedule-optimisation-challenge-starter-kit/sample_files/sample_scenario.json"
     with open(scenario) as fp:
         scenario = json.load(fp)
+    import pprint
+    pprint.pprint(scenario)
     route_graphs = generate_route_graphs(scenario)
-    save_graph(route_graphs)
+
+    # scenario = "../../../../usr/train-schedule-optimisation-challenge-starter-kit/sample_files/sample_scenario.json"
+    # with open(scenario) as fp:
+    #     scenario = json.load(fp)
+    # route_graphs = generate_route_graphs(scenario)
+    # save_graph(route_graphs)
