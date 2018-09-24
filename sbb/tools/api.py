@@ -1,9 +1,11 @@
 import logging
 import sbb.tools.logger
 import pprint
+import networkx
 
 from sbb.tools.parsers import parse_input_paths, parse_json_file
 from sbb.tools import input_dir, input_samples
+from sbb.tools.route_graph import generate_route_graphs
 
 
 class InstanceAPI:
@@ -15,20 +17,21 @@ class InstanceAPI:
         self.api_logger = logging.getLogger('APIlogger')
         self.api_logger.setLevel(logging.INFO)
 
-        self.data = self.load_data(ninstance)
+        self.data = self._load_data(ninstance)
+        self.route_graphs = generate_route_graphs(self.data['routes'])
         self._fname = self.data['label']
         self.api_logger.info('API for the Instances Initialized')
 
     def __str__(self):
         return 'API to interface instance {}'.format(self._fname)
 
-    def keys(self):
-        return self.data.keys()
-
     def __getitem__(self, key):
         return pprint.pprint(self.data[key])
 
-    def load_data(self, ninstance: int) -> dict:
+    def keys(self):
+        return self.data.keys()
+
+    def _load_data(self, ninstance: int) -> dict:
         try:
             self.api_logger.info('loaded {}'.format(
                 self._ipaths[ninstance].parts[-1]))
@@ -38,5 +41,19 @@ class InstanceAPI:
                 len(self._ipaths)))
             raise e
 
+    def generate_all_paths(self, route_id: int, start: str, end: str) -> list:
+        return networkx.algorithms.simple_paths.all_simple_paths(
+            self.route_graphs[route_id], source=start, target=end)
+
+    def nodes(self, route_id) -> list:
+        return self.route_graphs.nodes()
+
+    def edges(self, route_id) -> list:
+        return self.route_graphs.edges()
+
     # def inspect(self, key: str):
     #     return pprint.pprint(self.data[key])
+
+
+if __name__ == '__main__':
+    i = InstanceAPI()
