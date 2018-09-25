@@ -50,6 +50,9 @@ class InstanceAPI:
     def edges(self, route_id) -> list:
         return list(self.route_graphs[route_id].edges())
 
+    def edges_sn(self, route_id) -> list:
+        return self.route_graphs[route_id].edges()
+
     def generate_paths(self, route_id: int, start: str, end: str) -> list:
         all_paths = partial(networkx.algorithms.simple_paths.all_simple_paths,
                             self.route_graphs[route_id])
@@ -70,6 +73,18 @@ class InstanceAPI:
                             self.route_graphs[route_id])
         return list(
             chain.from_iterable(starmap(all_paths, product(roots, leaves))))
+
+    #TODO This is problably the most retarded function of the whole code
+    #TODO but I blaim networkx on this one.
+    #TODO this func transforms paths written in nodes into paths written in
+    #TODO edges
+    def from_paths_to_arcs(self, route_id: int, path: list) -> list:
+        edges_info = self.edges_sn(route_id)
+        edges_path = []
+        for node2node in path:
+            edge_path.append(
+                sedges_info[node2node[0], node2node[1]]['sequence_number'])
+        return edges_path
 
     # def inspect(self, key: str):
     #     return pprint.pprint(self.data[key])
