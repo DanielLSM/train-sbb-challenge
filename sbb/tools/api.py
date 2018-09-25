@@ -56,10 +56,27 @@ class InstanceAPI:
     def generate_paths(self, route_id: int, start: str, end: str) -> list:
         all_paths = partial(networkx.algorithms.simple_paths.all_simple_paths,
                             self.route_graphs[route_id])
-        return list(chain.from_iterable(starmap(all_paths, start, end)))
+        path_iter = all_paths(start, end)
+        return list(path_iter)
 
-        # return networkx.algorithms.simple_paths.all_simple_paths(
-        #     self.route_graphs[route_id], source=start, target=end)
+    def generate_edge_paths(self, route_id: int, start: str, end: str) -> list:
+        all_paths = partial(networkx.algorithms.simple_paths.all_simple_paths,
+                            self.route_graphs[route_id])
+        path_iter = all_paths(start, end)
+        paths = []
+        edges_info = self.edges_sn(route_id)
+        for path in path_iter:
+            edges_path = []
+            for i in range(len(path) - 1):
+                edges_path.append(
+                    edges_info[path[i], path[i + 1]]['sequence_number'])
+            paths.append(edges_path)
+        return paths
+
+    # def generate_paths(self, route_id: int, start: str, end: str) -> list:
+    #     all_paths = partial(networkx.algorithms.simple_paths.all_simple_paths,
+    #                         self.route_graphs[route_id])
+    #     return list(chain.from_iterable(starmap(all_paths, start, end)))
 
     #TODO generate meaningfull route sections with sequece numbers as needed for the solution
     #TODO get rid of the M1 cancer, we need to generate meaningful variables with times
@@ -81,9 +98,9 @@ class InstanceAPI:
     def from_paths_to_arcs(self, route_id: int, path: list) -> list:
         edges_info = self.edges_sn(route_id)
         edges_path = []
-        for node2node in path:
-            edge_path.append(
-                sedges_info[node2node[0], node2node[1]]['sequence_number'])
+        for i in range(len(path) - 1):
+            edges_path.append(
+                edges_info[path[i], path[i + 1]]['sequence_number'])
         return edges_path
 
     # def inspect(self, key: str):
