@@ -11,16 +11,11 @@ logger = logging.getLogger('APIlogger')
 
 def parse_input_paths(input_dir: str = input_dir):
 
-    try:
-        data_dir = Path(input_dir)
-        cwd = Path.cwd()
-        import pdb
-        pdb.set_trace()
-    else:
-        
-    finally:
+    data_dir = Path("~" + input_dir).expanduser()
+    if not data_dir.is_dir():
+        data_dir = Path("~/dev/projs" + input_dir).expanduser()
         assert data_dir.is_dir(), "input path is not a directory"
-    
+
     return sorted([x for x in data_dir.iterdir() if x.is_file()])
 
 

@@ -17,13 +17,13 @@ class Instances:
         self._input_dir = input_dir
         self._ipaths = parse_input_paths(input_dir)
 
-        self.api_logger = logging.getLogger('APIlogger')
-        self.api_logger.setLevel(logging.INFO)
+        self.logger = logging.getLogger('APIlogger')
+        self.logger.setLevel(logging.INFO)
 
         self.data = self._load_data(ninstance)
         self.route_graphs = generate_route_graphs(self.data)
         self._fname = self.data['label']
-        self.api_logger.info('API for the Instances Initialized')
+        self.logger.info('api for the instances initialized')
 
     def __str__(self):
         return 'API to interface instance {}'.format(self._fname)
@@ -36,11 +36,11 @@ class Instances:
 
     def _load_data(self, ninstance: int) -> dict:
         try:
-            self.api_logger.info('loaded {}'.format(
+            self.logger.info('loaded {}'.format(
                 self._ipaths[ninstance].parts[-1]))
             return parse_json_file(self._ipaths[ninstance])
         except ValueError as e:
-            self.api_logger.ERROR("Select an instance from 0 to {}".format(
+            self.logger.ERROR("select an instance from 0 to {}".format(
                 len(self._ipaths)))
             raise e
 

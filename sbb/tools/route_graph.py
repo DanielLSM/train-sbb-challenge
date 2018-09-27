@@ -59,10 +59,10 @@ def generate_route_graphs(scenario):
         for path in route["route_paths"]:
             for (i, route_section) in enumerate(path["route_sections"]):
                 sn = route_section['sequence_number']
-                print(
-                    "Adding Edge from {} to {} with sequence number {}".format(
-                        from_node_id(path, route_section, i),
-                        to_node_id(path, route_section, i), sn))
+                # print(
+                #     "Adding Edge from {} to {} with sequence number {}".format(
+                #         from_node_id(path, route_section, i),
+                #         to_node_id(path, route_section, i), sn))
                 G.add_edge(
                     from_node_id(path, route_section, i),
                     to_node_id(path, route_section, i),
