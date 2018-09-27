@@ -22,14 +22,13 @@ fh.setLevel(logging.DEBUG)
 
 # console handler
 ch = logging.StreamHandler()
-ch.setLevel(logging.INFO)
+ch.setLevel(logging.DEBUG)
 
 # format and set https://docs.python.org/3/howto/logging.html#a-simple-example
 # logging.basicConfig(
 #     format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 formatter = logging.Formatter(
-    '%(asctime)s - %(name)s - %(threadName)s: \n #%(levelname)s - %(message)s',
-    datefmt='%m/%d/%Y %I:%M:%S %p')
+    '%(name)s - %(threadName)s: #%(levelname)s - %(message)s')
 ch.setFormatter(formatter)
 
 formatter = logging.Formatter(

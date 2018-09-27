@@ -18,15 +18,20 @@ class ProblemStament(ABC):
         self.logger = logging.getLogger('APIlogger')
         self.logger.setLevel(logging.INFO)
         self.instance = Instances(ninstance, input_dir)
+        # self.trains =
 
-    def section_variables(self) -> dict:
+    def generate_section_vars(self, train_id: int, route_id: int, start: str,
+                              finish: str) -> dict:
+        # try:
+        #     self.instance.data['service_intentions']
+
         return NotImplemented
 
-    def temporal_variables(self) -> dict:
+    def generate_temporal_vars(self) -> dict:
         return NotImplemented
 
     @abstractmethod
-    def define_variables(self) -> dict:
+    def generate_vars(self) -> dict:
         return NotImplemented
 
     @property
@@ -39,10 +44,9 @@ class MixedIntegerFormulator(ProblemStament):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self.instance = Instances(ninstance, input_dir)
         self.logger.info('MILP initiated')
 
-    def define_variables(self) -> dict:
+    def generate_vars(self) -> dict:
         return NotImplemented
 
     @property
@@ -53,6 +57,10 @@ class MixedIntegerFormulator(ProblemStament):
 if __name__ == '__main__':
 
     milp = MixedIntegerFormulator()
+    milp.instance.keys()
+    train_id = milp.instance.data['service_intentions']['id']
+    route_id = milp.instance.data['service_intentions']['route']
+
     # instance = Instances()
     # print(instance)
     # paths = instance.generate_all_paths(111)
