@@ -8,8 +8,8 @@ logger = logging.getLogger('APIlogger')
 logger.setLevel(logging.INFO)
 
 # file handler
-fh = logging.FileHandler('../../logs/API.log')
-fh.setLevel(logging.INFO)
+# fh = logging.FileHandler('/../logs/API.log')
+# fh.setLevel(logging.INFO)
 
 # console handler
 ch = logging.StreamHandler()
@@ -21,9 +21,9 @@ ch.setLevel(logging.INFO)
 formatter = logging.Formatter(
     '%(asctime)s - %(name)s - %(threadName)s: \n #%(levelname)s - %(message)s',
     datefmt='%m/%d/%Y %I:%M:%S %p')
-fh.setFormatter(formatter)
+# fh.setFormatter(formatter)
 ch.setFormatter(formatter)
 
 # add the handlers to the logger
-logger.addHandler(fh)
+# logger.addHandler(fh)
 logger.addHandler(ch)

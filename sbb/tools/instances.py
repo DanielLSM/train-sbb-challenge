@@ -109,4 +109,4 @@ class Instances:
 
 if __name__ == "__main__":
 
-    i = InstanceAPI()
+    i = Instances()

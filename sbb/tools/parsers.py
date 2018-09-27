@@ -1,7 +1,7 @@
 import logging
 import sbb.tools.logger
 import json
-from pathlib import Path
+from pathlib import Path, PurePath
 from pprint import pprint
 
 from sbb.tools import input_dir
@@ -11,8 +11,16 @@ logger = logging.getLogger('APIlogger')
 
 def parse_input_paths(input_dir: str = input_dir):
 
-    data_dir = Path(input_dir)
-    assert data_dir.is_dir(), "input path is not a directory"
+    try:
+        data_dir = Path(input_dir)
+        cwd = Path.cwd()
+        import pdb
+        pdb.set_trace()
+    else:
+        
+    finally:
+        assert data_dir.is_dir(), "input path is not a directory"
+    
     return sorted([x for x in data_dir.iterdir() if x.is_file()])
 
 

@@ -110,3 +110,6 @@ venv.bak/
 
 # Mumble Rappers
 /sbb/algos/*.py
+
+# Data
+/data
