@@ -11,7 +11,7 @@ from sbb.tools import input_dir, input_samples
 from sbb.tools.route_graph import generate_route_graphs
 
 
-class InstanceAPI:
+class Instances:
 
     def __init__(self, ninstance: int = 0, input_dir: str = input_samples):
         self._input_dir = input_dir
