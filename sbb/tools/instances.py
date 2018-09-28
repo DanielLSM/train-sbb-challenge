@@ -2,6 +2,7 @@ import logging
 import sbb.tools.logger
 import pprint
 import networkx
+from collections import defaultdict
 
 from itertools import chain, product, starmap
 from functools import partial
@@ -23,6 +24,7 @@ class Instances:
         self.data = self._load_data(ninstance)
         self.route_graphs = generate_route_graphs(self.data)
         self._fname = self.data['label']
+        self._generate_route2markers2sections()
         self.logger.info('api for the instances initialized')
 
     def __str__(self):
@@ -43,6 +45,25 @@ class Instances:
             self.logger.ERROR("select an instance from 0 to {}".format(
                 len(self._ipaths)))
             raise e
+
+    def _generate_route2markers2sections(self) -> dict:
+        """ Creates a dict where the key is route_id
+            to markers, each marker has a list of required
+            sections
+        """
+        # TODO: add route_alternative_marker_at_exit to compute paths
+        # TODO: finish this
+        self.route2marker2sections = {}
+        for route in self.data['routes']:
+            self.route2marker2sections[route['id']] = defaultdict(set)
+            for route_path in route['route_paths']:
+                for route_section in route_path['route_sections']:
+                    if 'section_marker' in route_section.keys():
+                        # import pdb
+                        # pdb.set_trace()
+                        self.route2marker2sections[route['id']][route_section[
+                            'section_marker'][0]].add(
+                                route_section['sequence_number'])
 
     def nodes(self, route_id) -> list:
         return list(self.route_graphs[route_id].nodes())

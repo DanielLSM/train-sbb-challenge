@@ -58,8 +58,11 @@ if __name__ == '__main__':
 
     milp = MixedIntegerFormulator()
     milp.instance.keys()
-    train_id = milp.instance.data['service_intentions']['id']
-    route_id = milp.instance.data['service_intentions']['route']
+    train_id = milp.instance.data['service_intentions'][0]['id']
+    route_id = milp.instance.data['service_intentions'][0]['route']
+    section_requirements = milp.instance.data['service_intentions'][0][
+        'section_requirements']
+        
 
     # instance = Instances()
     # print(instance)
