@@ -63,7 +63,7 @@ if __name__ == '__main__':
     section_requirements = milp.instance.data['service_intentions'][0][
         'section_requirements']
     # milp.instance.route2marker2sections
-    nodes = ['(1_beginning)', '(M2)', '(14_end)']
+    nodes = ['(3_beginning)', '(M2)', '(M3)', '(M4)', '(14_end)']
     route_id = 111
     milp.instance.generate_paths_from_nodes(route_id, nodes)
 

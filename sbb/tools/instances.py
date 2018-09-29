@@ -27,7 +27,7 @@ class Instances:
         self._hash = self.data['hash']
 
         self._generate_route2markers2sections()
-        self._generate_sections2nodes()
+        self._generate_route2sections2nodes()
 
         self.logger.info('api for the instances initialized')
 
@@ -50,9 +50,9 @@ class Instances:
                 len(self._ipaths)))
             raise e
 
-    def _generate_route2markers2sections(self) -> dict:
+    def _generate_route2markers2sections(self) -> None:
         """ Creates a dict where the key is route_id
-            to markers, each marker has a list of required
+            to markers, each marker has a list of  possible required
             sections
         """
         # TODO: add route_alternative_marker_at_exit to compute paths
@@ -68,16 +68,19 @@ class Instances:
                                 route_section['sequence_number'])
 
     #TODO: Put more things such as time rectritions on this dict
-    def _generate_sections2nodes(self):
-        self._route2section2nodes = {}
+    def _generate_route2sections2nodes(self) -> None:
+        """ Creates a dict where the key is route_id
+            to sections, to each 'in' and 'out' node
+        """
+        self.route2sections2nodes = {}
         for key in self.route_graphs.keys():
-            self._route2section2nodes[key] = {}
+            self.route2sections2nodes[key] = {}
             edges_info = self.route_graphs[key].edges()
             # TODO: do inverted mapping or actually check how they
             # TODO: store the nodes and arcs
             # inv_map = {v: k for k, v in edges_info.iteritems()}
             for edges in edges_info:
-                self._route2section2nodes[key][edges_info[edges[0], edges[1]][
+                self.route2sections2nodes[key][edges_info[edges[0], edges[1]][
                     'sequence_number']] = {
                         'in': edges[0],
                         'out': edges[1]
@@ -93,14 +96,18 @@ class Instances:
     #         for requirement in train['section_requirements']:
 
     def generate_paths_from_nodes(self, route_id, nodes) -> list:
-        """ Given a list of nodes, get all possible paths (lists of lists) """
-        paths = []
+        """ Given a list of nodes by ORDER, get all possible paths (lists of lists) """
+        ppaths = []
         for i in range(len(nodes) - 1):
-            path = []
-            path = self.generate_edge_paths(route_id, nodes[0], nodes[1])
-            paths.append(path)
-        import pdb
-        pdb.set_trace()
+            paths = self.generate_edge_paths(route_id, nodes[i], nodes[i + 1])
+            if i is not 0:
+                pathsi = []
+                for path in list(product(ppaths, paths)):
+                    pathsi.append(list(chain(*path)))
+                ppaths = pathsi
+            else:
+                ppaths = paths
+        return ppaths
 
     def nodes(self, route_id) -> list:
         return list(self.route_graphs[route_id].nodes())
@@ -130,9 +137,6 @@ class Instances:
                     edges_info[path[i], path[i + 1]]['sequence_number'])
             paths.append(edges_path)
         return paths
-
-        # import pdb
-        # pdb.set_trace()
 
     # def generate_paths(self, route_id: int, start: str, end: str) -> list:
     #     all_paths = partial(networkx.algorithms.simple_paths.all_simple_paths,
