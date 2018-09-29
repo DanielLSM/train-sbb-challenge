@@ -20,15 +20,12 @@ class ProblemStament(ABC):
         self.instance = Instances(ninstance, input_dir)
         # self.trains =
 
-    def generate_section_vars(self, train_id: int, route_id: int, start: str,
-                              finish: str) -> dict:
-        # try:
-        #     self.instance.data['service_intentions']
-
-        return NotImplemented
-
-    def generate_temporal_vars(self) -> dict:
-        return NotImplemented
+    def generate_vars(self, train_id) -> iter:
+        """ given a train_id a generator is given, yielding vars 
+        here we generate temporal and sections vars
+        """
+        self.instance.service_intentions[]
+        yield {}
 
     @abstractmethod
     def generate_vars(self) -> dict:
@@ -65,7 +62,7 @@ if __name__ == '__main__':
     # milp.instance.route2marker2sections
     nodes = ['(3_beginning)', '(M2)', '(M3)', '(M4)', '(14_end)']
     route_id = 111
-    milp.instance.generate_paths_from_nodes(route_id, nodes)
+    milp.instance.paths_from_nodes(route_id, nodes)
 
     # instance = Instances()
     # print(instance)

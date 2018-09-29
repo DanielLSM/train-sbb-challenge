@@ -28,6 +28,7 @@ class Instances:
 
         self._generate_route2markers2sections()
         self._generate_route2sections2nodes()
+        self._generate_service_intentions()
 
         self.logger.info('api for the instances initialized')
 
@@ -49,6 +50,14 @@ class Instances:
             self.logger.ERROR("select an instance from 0 to {}".format(
                 len(self._ipaths)))
             raise e
+
+    def _generate_service_intentions(self) -> None:
+        """ Creates a dict from train to service intentions, and stores
+            more approprietly
+        """
+        self.service_intentions = {
+            train['id']: train for train in self.data['service_intentions']
+        }
 
     def _generate_route2markers2sections(self) -> None:
         """ Creates a dict where the key is route_id
@@ -95,7 +104,7 @@ class Instances:
 
     #         for requirement in train['section_requirements']:
 
-    def generate_paths_from_nodes(self, route_id, nodes) -> list:
+    def paths_from_nodes(self, route_id, nodes) -> list:
         """ Given a list of nodes by ORDER, get all possible paths (lists of lists) """
         ppaths = []
         for i in range(len(nodes) - 1):
