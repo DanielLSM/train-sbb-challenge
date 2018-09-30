@@ -2,6 +2,7 @@ import logging
 import sbb.tools.logger
 
 from abc import ABC, abstractmethod
+from itertools import product, chain, permutations
 
 from sbb.tools.instances import Instances
 from sbb.tools import input_dir, input_samples
@@ -20,13 +21,6 @@ class ProblemStament(ABC):
         self.instance = Instances(ninstance, input_dir)
         # self.trains =
 
-    def generate_vars(self, train_id) -> iter:
-        """ given a train_id a generator is given, yielding vars 
-        here we generate temporal and sections vars
-        """
-        self.instance.service_intentions[]
-        yield {}
-
     @abstractmethod
     def generate_vars(self) -> dict:
         return NotImplemented
@@ -43,8 +37,30 @@ class MixedIntegerFormulator(ProblemStament):
         super().__init__(*args, **kwargs)
         self.logger.info('MILP initiated')
 
-    def generate_vars(self) -> dict:
-        return NotImplemented
+    def generate_vars(self, train_id) -> iter:
+        """ given a train_id a generator is given, yielding vars 
+        here we generate temporal and sections vars
+        """
+        markers = [
+            marker_rec['section_marker'] for marker_rec in
+            self.instance.service_intentions[train_id]['section_requirements']
+        ]
+
+        route = self.instance.service_intentions[train_id]['route']
+        req_marker_sections = [
+            self.instance.route2marker2sections[route][marker]
+            for marker in markers
+        ]
+
+        # TODO: * means passing as argumentssssss xd
+        # TODO: more than one train retard
+        for requirements in product(*req_marker_sections):
+            for path in self.instance.paths_from_arcs(route_id, requirements):
+                yield ['{}#{}'.format(route_id, k) for k in path]
+
+        #TODO give me paths based on edges for simplicity please, done
+        # for requirements in permu
+        # yield self.instance.paths_from_arcs(route_id, [1, 5, 14])
 
     @property
     def cardinality(self) -> int:
@@ -60,11 +76,13 @@ if __name__ == '__main__':
     section_requirements = milp.instance.data['service_intentions'][0][
         'section_requirements']
     # milp.instance.route2marker2sections
-    nodes = ['(3_beginning)', '(M2)', '(M3)', '(M4)', '(14_end)']
+    # nodes = ['(3_beginning)', '(M2)', '(M3)', '(M4)', '(14_end)']
+    nodes = milp.instance.transform_arcs2nodes(111, [1, 5, 14])
     route_id = 111
-    milp.instance.paths_from_nodes(route_id, nodes)
-
+    milp.instance.paths_from_arcs(route_id, [1, 5, 14])
     # instance = Instances()
+    for ppp in milp.generate_vars(111):
+        print(ppp)
     # print(instance)
     # paths = instance.generate_all_paths(111)
     # a = paths[0][0]

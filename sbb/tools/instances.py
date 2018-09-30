@@ -95,15 +95,7 @@ class Instances:
                         'out': edges[1]
                     }
 
-    # TODO: Include more information such as time
-    # def _generate_all_paths_under_restrictions(self):
-    #     """ By route and train """
-    #     self._train2path = {}
-    #     for train in self.data['service_intentions']:
-    #         self._train2paths[train['id']] = {}
-
-    #         for requirement in train['section_requirements']:
-
+    # TODO: PRODUCT ACEPTS ANY NUMBER OF PATHS XD
     def paths_from_nodes(self, route_id, nodes) -> list:
         """ Given a list of nodes by ORDER, get all possible paths (lists of lists) """
         ppaths = []
@@ -118,6 +110,19 @@ class Instances:
                 ppaths = paths
         return ppaths
 
+    def paths_from_arcs(self, route_id, arcs) -> list:
+        """ Given a list of nodes by ORDER, get all possible paths (lists of lists) """
+        nodes = self.transform_arcs2nodes(route_id, arcs)
+        return self.paths_from_nodes(route_id, nodes)
+
+    def transform_arcs2nodes(self, route_id, arcs) -> list:
+        nodes = []
+        for arc in arcs:
+            nodes.append(self.route2sections2nodes[route_id][arc]['in'])
+            nodes.append(self.route2sections2nodes[route_id][arc]['out'])
+        # import pdb; pdb.set_trace()
+        return nodes
+
     def nodes(self, route_id) -> list:
         return list(self.route_graphs[route_id].nodes())
 
@@ -126,12 +131,6 @@ class Instances:
 
     def edges_sn(self, route_id) -> list:
         return self.route_graphs[route_id].edges()
-
-    def generate_paths(self, route_id: int, start: str, end: str) -> list:
-        all_paths = partial(networkx.algorithms.simple_paths.all_simple_paths,
-                            self.route_graphs[route_id])
-        path_iter = all_paths(start, end)
-        return list(path_iter)
 
     def generate_edge_paths(self, route_id: int, start: str, end: str) -> list:
         all_paths = partial(networkx.algorithms.simple_paths.all_simple_paths,
@@ -147,10 +146,11 @@ class Instances:
             paths.append(edges_path)
         return paths
 
-    # def generate_paths(self, route_id: int, start: str, end: str) -> list:
-    #     all_paths = partial(networkx.algorithms.simple_paths.all_simple_paths,
-    #                         self.route_graphs[route_id])
-    #     return list(chain.from_iterable(starmap(all_paths, start, end)))
+    def generate_paths(self, route_id: int, start: str, end: str) -> list:
+        all_paths = partial(networkx.algorithms.simple_paths.all_simple_paths,
+                            self.route_graphs[route_id])
+        path_iter = all_paths(start, end)
+        return list(path_iter)
 
     #TODO generate meaningfull route sections with sequece numbers as needed for the solution
     #TODO get rid of the M1 cancer, we need to generate meaningful variables with times
@@ -167,7 +167,7 @@ class Instances:
 
     #TODO This is problably the most retarded function of the whole code
     #TODO but I blaim networkx on this one.
-    #TODO this func transforms paths written in nodes into paths written in
+    #TODO this func transforms full paths written in nodes into paths written in
     #TODO edges
     def from_paths_to_arcs(self, route_id: int, path: list) -> list:
         edges_info = self.edges_sn(route_id)
@@ -179,6 +179,20 @@ class Instances:
 
     # def inspect(self, key: str):
     #     return pprint.pprint(self.data[key])
+
+    # def generate_paths(self, route_id: int, start: str, end: str) -> list:
+    #     all_paths = partial(networkx.algorithms.simple_paths.all_simple_paths,
+    #                         self.route_graphs[route_id])
+    #     return list(chain.from_iterable(starmap(all_paths, start, end)))
+
+    # TODO: Include more information such as time
+    # def _generate_all_paths_under_restrictions(self):
+    #     """ By route and train """
+    #     self._train2path = {}
+    #     for train in self.data['service_intentions']:
+    #         self._train2paths[train['id']] = {}
+
+    #         for requirement in train['section_requirements']:
 
 
 if __name__ == "__main__":
