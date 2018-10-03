@@ -19,7 +19,6 @@ class ProblemStament(ABC):
         self.logger = logging.getLogger('APIlogger')
         self.logger.setLevel(logging.INFO)
         self.instance = Instances(ninstance, input_dir)
-        # self.trains =
 
     @abstractmethod
     def generate_vars(self) -> dict:
