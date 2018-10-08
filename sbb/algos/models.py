@@ -1,7 +1,7 @@
 import logging
 import sbb.tools.logger
 
-from sbb.tools.api import InstanceAPI
+from sbb.tools.instances import Instances
 
 logger = logging.getLogger('APILogger')
 

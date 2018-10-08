@@ -10,7 +10,7 @@ logger = logging.getLogger('APILogger')
 
 class BaseSolver(ABC):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args,**kwargs):
         raise NotImplementedError
 
     @abstractmethod
