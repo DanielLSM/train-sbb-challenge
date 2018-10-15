@@ -108,9 +108,5 @@ venv.bak/
 .vscode/
 *.graphml
 
-# Mumble Rappers
-/sbb/algos/*.py
-/sbb/algos/common/*.py
-
 # Data
 /data
