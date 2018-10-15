@@ -6,7 +6,7 @@ from sbb.tools.instances import Instances
 logger = logging.getLogger('APILogger')
 
 if __name__ == '__main__':
-    instance = InstanceAPI()
+    instance = Instances()
     print(instance)
     paths = instance.generate_all_paths(111)
     a = paths[0][0]

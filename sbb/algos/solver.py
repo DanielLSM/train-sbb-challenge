@@ -10,7 +10,7 @@ logger = logging.getLogger('APILogger')
 
 class BaseSolver(ABC):
 
-    def __init__(self, *args,**kwargs):
+    def __init__(self, *args, **kwargs):
         raise NotImplementedError
 
     @abstractmethod
@@ -33,3 +33,4 @@ if __name__ == '__main__':
     # b = paths[0][-1]
     # paths = instance.generate_paths(111, a, b)
     # paths1 = instance.generate_edge_paths(111, a, b)
+    pass

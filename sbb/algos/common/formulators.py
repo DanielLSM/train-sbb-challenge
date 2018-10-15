@@ -41,8 +41,8 @@ class MixedIntegerFormulator(ProblemStament):
         here we generate temporal and sections vars
         """
         markers = [
-            marker_rec['section_marker'] for marker_rec in
-            self.instance.service_intentions[train_id]['section_requirements']
+            marker_rec['section_marker'] for marker_rec in self.instance
+            .service_intentions[train_id]['section_requirements']
         ]
 
         route = self.instance.service_intentions[train_id]['route']
