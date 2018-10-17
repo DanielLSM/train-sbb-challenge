@@ -1,4 +1,5 @@
 import logging
+import tensorflow
 import sbb.tools.logger
 
 from sbb.tools.instances import Instances
